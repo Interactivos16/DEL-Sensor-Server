@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+  .line {
+    fill: none;
+    stroke-width: 2px;
+  }
+  .t15-line {
+    stroke: darkred;
+  }
+  .t21-line {
+    stroke: steelblue;
+  }
+  .axis {
+    font-size: 14px;
+  }
+  svg {
+    display: block;
+    margin: 0 auto;
+  }
+</style>
+
+<body>
+  <script src="d3.min.js"></script>
+  <script>
+
+    // set the dimensions and margins of the graph
+    var margin = {top: 20, right: 50, bottom: 30, left: 50};
+    var width = 980 - margin.left - margin.right;
+    var height = 500 - margin.top - margin.bottom;
+
+    // set the ranges
+    var x = d3.scaleTime().range([0, width]);
+    var y = d3.scaleLinear().range([height, 0]);
+
+    var t15Line = d3.line()
+        .x(function(d) { return x(d.time); })
+        .y(function(d) { return y(d.temp15); });
+
+    var t21Line = d3.line()
+        .x(function(d) { return x(d.time); })
+        .y(function(d) { return y(d.temp21); });
+
+    // append the svg object to the body of the page
+    var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    // Get the data
+    d3.csv("/python/data.csv", function(error, data) {
+      if (error) throw error;
+
+      // format the data
+      data.forEach(function(d) {
+        d.time = new Date(d.time * 1000);
+        d.temp15 = +d.temp15;
+        d.temp21 = +d.temp21;
+      });
+
+      function getRangeArray(md) {
+        var minMaxArray = [];
+        minMaxArray.push(d3.min(md, function(d) { return d.temp15; }));
+        minMaxArray.push(d3.max(md, function(d) { return d.temp15; }));
+        minMaxArray.push(d3.min(md, function(d) { return d.temp21; }));
+        minMaxArray.push(d3.max(md, function(d) { return d.temp21; }));
+        return minMaxArray;
+      }
+
+      x.domain(d3.extent(data, function(d) { return d.time; }));
+      y.domain(d3.extent(getRangeArray(data)));
+
+      svg.append("path")
+        .data([data])
+        .attr("class", "line t15-line")
+        .attr("d", t15Line);
+
+      svg.append("path")
+        .data([data])
+        .attr("class", "line t21-line")
+        .attr("d", t21Line);
+
+      svg.append("g")
+        .attr("transform", "translate(0," + height + ")")
+        .attr("class", "axis")
+        .call(d3.axisBottom(x));
+
+      svg.append("g")
+        .attr("class", "axis")
+        .call(d3.axisLeft(y));
+
+    });
+
+  </script>
+</body>
