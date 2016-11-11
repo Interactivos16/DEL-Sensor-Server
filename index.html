@@ -52,6 +52,8 @@
     d3.csv("/python/data.csv", function(error, data) {
       if (error) throw error;
 
+      data = data.slice(Math.max(0,data.length-800));
+
       // format the data
       data.forEach(function(d) {
         d.time = new Date(d.time * 1000);
