@@ -17,11 +17,12 @@ sht21 = SHT21(1)
 writeHeader = not path.isfile(outputFile)
 
 with open(outputFile,"a") as fo:
-  if writeHeader:
-    fo.write ("time,temp15,hum15,temp21,hum21\n")
-  fo.write ("%s,%s,%s,%s,%s\n"%(time(),
-                                sht21.read_temperature(),
-                                sht21.read_humidity(),
-                                sht21.read_temperature(),
-                                sht21.read_humidity()))
-  fo.close()
+	if writeHeader:
+		fo.write ("time,temp15,hum15,temp21,hum21\n")
+	fo.write ("%s,%s,%s,%s,%s\n"%(time(),
+				      sht15.read_temperature_C(),
+ 				      sht15.read_humidity(),
+				      sht21.read_temperature(),
+				      sht21.read_humidity()))
+	fo.close()
+
