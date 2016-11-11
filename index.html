@@ -59,17 +59,10 @@
         d.temp21 = +d.temp21;
       });
 
-      function getRangeArray(md) {
-        var minMaxArray = [];
-        minMaxArray.push(d3.min(md, function(d) { return d.temp15; }));
-        minMaxArray.push(d3.max(md, function(d) { return d.temp15; }));
-        minMaxArray.push(d3.min(md, function(d) { return d.temp21; }));
-        minMaxArray.push(d3.max(md, function(d) { return d.temp21; }));
-        return minMaxArray;
-      }
-
       x.domain(d3.extent(data, function(d) { return d.time; }));
-      y.domain(d3.extent(getRangeArray(data)));
+      y.domain([d3.min(data, function(d) { return Math.min(d.temp15,d.temp21); }),
+                d3.max(data, function(d) { return Math.max(d.temp15,d.temp21); })
+               ]);
 
       svg.append("path")
         .data([data])
