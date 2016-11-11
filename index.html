@@ -85,6 +85,11 @@
         .attr("class", "axis")
         .call(d3.axisLeft(y));
 
+      svg.append("g")
+        .attr("transform", "translate("+width+",0)")
+        .attr("class", "axis")
+        .call(d3.axisRight(y));
+
       var midIndex = parseInt(data.length/2);
       svg.append("text")
 		.attr("transform", "translate(" + midIndex + "," + y(data[midIndex].temp15) + ")")
