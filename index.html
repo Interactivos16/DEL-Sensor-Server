@@ -83,6 +83,16 @@
         .attr("class", "axis")
         .call(d3.axisLeft(y));
 
+      var midIndex = parseInt(data.length/2);
+      svg.append("text")
+		.attr("transform", "translate(" + midIndex + "," + y(data[midIndex].temp15) + ")")
+        .attr("class", "t15-line")
+		.text("Composteira");
+
+      svg.append("text")
+		.attr("transform", "translate(" + midIndex + "," + y(data[midIndex].temp21) + ")")
+        .attr("class", "t21-line")
+		.text("Condensador");
     });
 
   </script>
