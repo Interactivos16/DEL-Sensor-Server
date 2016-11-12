@@ -61,6 +61,19 @@
         d.temp21 = +d.temp21;
       });
 
+      for(var i=2; i<data.length-1; i++) {
+        var avgTemp15 = (data[i-2].temp15 + data[i-1].temp15 + data[i].temp15)/3.0;
+        var avgTemp21 = (data[i-2].temp21 + data[i-1].temp21 + data[i].temp21)/3.0;
+
+        if(Math.abs(data[i].temp15 - avgTemp15) > 10.0) {
+          data[i].temp15 = data[i-1].temp15;
+        }
+
+        if(Math.abs(data[i].temp21 - avgTemp21) > 10.0) {
+          data[i].temp21 = data[i-1].temp21;
+        }
+      }
+
       x.domain(d3.extent(data, function(d) { return d.time; }));
       y.domain([d3.min(data, function(d) { return Math.min(d.temp15,d.temp21); }),
                 d3.max(data, function(d) { return Math.max(d.temp15,d.temp21); })
