@@ -61,17 +61,16 @@
         d.temp21 = +d.temp21;
       });
 
-      for(var i=2; i<data.length-1; i++) {
-        var avgTemp15 = (data[i-2].temp15 + data[i-1].temp15 + data[i].temp15)/3.0;
-        var avgTemp21 = (data[i-2].temp21 + data[i-1].temp21 + data[i].temp21)/3.0;
-
-        if(Math.abs(data[i].temp15 - avgTemp15) > 10.0) {
-          data[i].temp15 = data[i-1].temp15;
+      var avgSize = 10;
+      for(var i=avgSize; i<data.length; i++) {
+        var sumTemp15 = 0;
+        var sumTemp21 = 0;
+        for(var j=0; j<avgSize; j++) {
+          sumTemp15 += data[i-j].temp15;
+          sumTemp21 += data[i-j].temp21;
         }
-
-        if(Math.abs(data[i].temp21 - avgTemp21) > 10.0) {
-          data[i].temp21 = data[i-1].temp21;
-        }
+        data[i].temp15 = sumTemp15/avgSize;
+        data[i].temp21 = sumTemp21/avgSize;
       }
 
       x.domain(d3.extent(data, function(d) { return d.time; }));
